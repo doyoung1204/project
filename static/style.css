@@ -1,0 +1,22 @@
+body {
+    background-color: #f8f9fa;
+}
+h1, h2 {
+    color: #343a40;
+}
+
+.best-badge {
+    font-size: 0.8rem;
+    margin-left: 8px;
+    background: linear-gradient(45deg, red, orange, yellow, green, blue, indigo, violet);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    font-weight: bold;
+}
+
+.new-badge {
+    font-size: 0.8rem;
+    margin-left: 8px;
+    color: #ffc107; /* Bootstrap의 yellow 계열 */
+    font-weight: bold;
+}

@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>결제 정보 입력</h2>
+
+<div class="alert alert-warning">
+    <strong>입금 안내:</strong><br>
+    국민은행 123456-78-912345 (예금주: 남도영)<br>
+    입금자명은 정확히 기재해 주세요.
+</div>
+
+<form method="POST" action="{{ url_for('checkout', product_name=product_name) if product_name else url_for('checkout') }}">
+    <div class="mb-3">
+        <label for="card_number" class="form-label">통장 번호 및 이름</label>
+        <input type="text" name="card_number" id="card_number" class="form-control" required>
+    </div>
+    <div class="mb-3">
+        <label for="address" class="form-label">배송 주소</label>
+        <input type="text" name="address" id="address" class="form-control" required>
+    </div>
+
+    {% if product_name %}
+        <!-- 단일 상품 구매 -->
+        <p class="fw-bold">총 결제 금액: {{ "{:,}".format(total) }}원</p>
+    {% else %}
+        <!-- 장바구니 전체 결제 -->
+        <h5 class="mt-4">주문 목록:</h5>
+        <ul class="list-group mb-3">
+            {% for item in items %}
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                    {{ item.product_name }} x {{ item.quantity }}
+                    <span>{{ "{:,}".format(item.price * item.quantity) }}원</span>
+                </li>
+            {% endfor %}
+        </ul>
+        <p class="fw-bold">총 결제 금액: {{ "{:,}".format(total) }}원</p>
+    {% endif %}
+
+    <button type="submit" class="btn btn-primary">결제하기</button>
+</form>
+{% endblock %}

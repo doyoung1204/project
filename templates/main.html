@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>상품 목록</h2>
+
+<!-- 검색 폼 -->
+<form method="GET" action="{{ url_for('main') }}" class="mb-4">
+    <div class="input-group">
+        <input type="text" name="q" class="form-control" placeholder="상품명을 검색하세요" value="{{ query or '' }}">
+        <button class="btn btn-outline-secondary" type="submit">검색</button>
+    </div>
+</form>
+
+<!-- 상품 카드 목록 -->
+<div class="row">
+    {% for product in products %}
+    <div class="col-md-4 mb-4">
+        <div class="card h-100">
+            <img src="{{ product.image_url }}" class="card-img-top" alt="{{ product.name }}" style="height: 180px; object-fit: contain;">
+            <div class="card-body d-flex flex-column justify-content-between">
+
+                <!-- 상품명 + Best 뱃지 표시 -->
+                <h5 class="card-title d-flex align-items-center">
+                    {{ product.name }}
+                    {% if product.name == '태깅이' %}
+                        <span class="best-badge">Best</span>
+                        <span class="new-badge">New</span>
+                    {% elif product.name == '황보재윤' %}
+                        <span class="new-badge">New</span>
+                    {% endif %}
+                </h5>
+
+
+                <p class="card-text fw-bold mb-2">{{ "{:,}".format(product.price) }}원</p>
+
+                <div class="mt-auto">
+                    <!-- 구매 버튼 (checkout으로 연결) -->
+                    <form method="GET" action="{{ url_for('checkout', product_name=product.name) }}" style="display:inline;">
+                        <button type="submit" class="btn btn-primary btn-sm me-2">구매</button>
+                    </form>
+
+                    <!-- 장바구니 버튼 -->
+                    <form method="POST" action="{{ url_for('add_to_cart', product_name=product.name) }}" style="display:inline;">
+                        <button type="submit" class="btn btn-outline-secondary btn-sm">장바구니</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}

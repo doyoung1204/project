@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>장바구니</h2>
+{% if items %}
+<table class="table table-bordered text-center align-middle">
+    <thead class="table-light">
+        <tr>
+            <th>상품명</th>
+            <th>수량</th>
+            <th>가격</th>
+            <th>삭제</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for item in items %}
+        <tr>
+            <td>{{ item.product_name }}</td>
+            <td>
+                <form action="{{ url_for('update_quantity', cart_id=item.id) }}" method="POST" class="d-flex justify-content-center">
+                    <button name="action" value="decrease" class="btn btn-sm btn-outline-secondary me-2" {% if item.quantity <= 1 %}disabled{% endif %}>-</button>
+                    <span class="align-self-center">{{ item.quantity }}</span>
+                    <button name="action" value="increase" class="btn btn-sm btn-outline-secondary ms-2" {% if item.quantity >= 99 %}disabled{% endif %}>+</button>
+                </form>
+            </td>
+            <td>{{ "{:,}".format(item.price * item.quantity) }}원</td>
+            <td>
+                <form action="{{ url_for('remove_from_cart', cart_id=item.id) }}" method="POST">
+                    <button type="submit" class="btn btn-sm btn-danger">삭제</button>
+                </form>
+            </td>
+        </tr>
+        {% endfor %}
+        <tr class="table-secondary fw-bold">
+            <td colspan="2">총 합계</td>
+            <td colspan="2">
+                {{ "{:,}".format(total) }}원
+                <form method="GET" action="{{ url_for('checkout') }}" class="d-inline ms-3">
+                    <button type="submit" class="btn btn-success btn-sm">구매하기</button>
+                </form>
+                <a href="{{ url_for('main') }}" class="btn btn-secondary btn-sm ms-2">목록보기</a>
+            </td>
+        </tr>
+    </tbody>
+</table>
+{% else %}
+<p>장바구니가 비어있습니다.</p>
+{% endif %}
+{% endblock %}
